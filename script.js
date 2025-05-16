@@ -105,7 +105,7 @@ function getDeckIdFromUrl(deckUrl) {
 }
 
 // Function to get deck data by deckId
-async function getDeckById(deckId) {
+async function getDeckById(deckId, corsEnabled = True) {
   let original_url = `https://archidekt.com/api/decks/${deckId}/`;
   // const url = "https://corsproxy.io/?" + original_url;
   const url = "https://corsproxy.io/?" + encodeURIComponent(original_url);
@@ -202,7 +202,11 @@ function isValidInput(input) {
 
 // Process decklist: remove basic lands and remove banned cards
 async function processDeck(deck) {
-  // Handle Configuration
+  // Config - General
+  const disableCorsProxy = document.getElementById("disableCorsProxy").checked;
+  const enableDarkMode = document.getElementById("enableDarkMode").checked;
+  
+  // Config - Deck & Cards
   const removeBannedCards = document.getElementById("removeBannedCards").checked;
   const removeBasicLands = document.getElementById("removeBasicLands").checked;
   const removeNonBasicLands = document.getElementById("removeNonBasicLands").checked;
@@ -210,20 +214,20 @@ async function processDeck(deck) {
   let cardsToRemove = [];
   // Handle banned deck(s)
   if (removeBannedCards) {
-    const d = await getDeckById(bannedCardsDeckId);
+    const d = await getDeckById(bannedCardsDeckId, disableCorsProxy);
     // const d = await getDeckById(-1);
     const cards = getCardNamesFromArchidektDeck(d);
     cardsToRemove.push(...cards);
   }
   if (removeBasicLands) {
-    const d = await getDeckById(basicLandsDeckId);
+    const d = await getDeckById(basicLandsDeckId, disableCorsProxy);
     // const d = await getDeckById(-2);
     const cards = getCardNamesFromArchidektDeck(d);
     cardsToRemove.push(...cards);
   }
 
   if (removeNonBasicLands) {
-    const d = await getDeckById(nonBasicLandsDeckId);
+    const d = await getDeckById(nonBasicLandsDeckId, disableCorsProxy);
     // const d = await getDeckById(-3);
     const cards = getCardNamesFromArchidektDeck(d);
     cardsToRemove.push(...cards);
@@ -307,7 +311,8 @@ document.getElementById("processDeck").addEventListener("click", async () => {
     return;
   } else {
     if (isValidArchidektUrlFmt(decklist)) {
-      input_deck = await getDeckById(getDeckIdFromUrl(decklist));
+      // TODO: This needs to be refactored to modularly handle CORS Proxy Settings
+      input_deck = await getDeckById(getDeckIdFromUrl(decklist), disableCorsProxy);
       decklist = getCardNamesFromArchidektDeck(input_deck, true).join("\n");
       document.getElementById("decklist").value = decklist;
     }
