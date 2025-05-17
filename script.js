@@ -351,3 +351,8 @@ document.getElementById("resetDeck").addEventListener("click", () => {
 document.getElementById("enableDarkMode").addEventListener("click", () => {
   document.body.classList.toggle("dark-mode");
 });
+
+/* BUTTON - DEVELOPER MODE */
+document.getElementById("enableDeveloperMode").addEventListener("click", () => {
+  alert("Developer Mode toggled (stub)");
+});
