@@ -1,6 +1,6 @@
-const basicLandsDeckId = "9637985";
-const nonBasicLandsDeckId = "7966401";
-const bannedCardsDeckId = "7853311";
+let basicLandsDeckId = "9637985";
+let nonBasicLandsDeckId = "7966401";
+let bannedCardsDeckId = "7853311";
 // BASIC LANDS - https://archidekt.com/decks/9637985
 // NON-BASIC LANDS - https://archidekt.com/decks/7966401
 // Browser: https://archidekt.com/decks/7853311/banlist_draft
@@ -110,7 +110,7 @@ async function getDeckById(deckId, corsEnabled = True) {
 
   // Config: CORS Toggle
   if (corsEnabled) {
-    console.log('[DEBUG]: CORS Enabled')
+    console.log("[DEBUG]: CORS Enabled");
     const url = "https://corsproxy.io/?" + encodeURIComponent(original_url);
   }
 
@@ -347,6 +347,7 @@ document.getElementById("resetDeck").addEventListener("click", () => {
   document.getElementById("cards-remove").textContent = "";
 });
 
-// TODO - Implement
 /* BUTTON - DARK MODE/LIGHT MODE */
-document.getElementById("enableDarkMode").addEventListener("click", () => {});
+document.getElementById("enableDarkMode").addEventListener("click", () => {
+  document.body.classList.toggle("dark-mode");
+});
