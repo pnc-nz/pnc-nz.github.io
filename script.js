@@ -164,7 +164,7 @@ function getCardNamesFromArchidektDeck(deckData, prepend_quantity = false) {
   }
 
   return deckData.cards
-    .filter((card) => !card.categories.includes("Maybeboard")) // Exclude cards with the "Maybeboard" category
+    .filter((card) => !(card.categories || []).includes("Maybeboard")) // Safely handle null categories
     .map((card) => {
       const cardName = card.card.oracleCard.name;
       return prepend_quantity ? `${card.quantity} ${cardName}` : cardName;
