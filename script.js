@@ -107,26 +107,31 @@ function getDeckIdFromUrl(deckUrl) {
 // Function to get deck data by deckId
 async function getDeckById(deckId, corsEnabled = True) {
   let original_url = `https://archidekt.com/api/decks/${deckId}/`;
+  url = encodeURIComponent(original_url);
 
   // Config: CORS Toggle
   if (corsEnabled) {
     console.log("[DEBUG]: CORS Enabled");
-    const url = "https://corsproxy.io/?" + encodeURIComponent(original_url);
+    url = "https://corsproxy.io/?" + encodeURIComponent(original_url);
   }
 
   if (deckId == -1) {
+    console.log(`[DEBUG]: deckId[${deckId}] >> banlist_sample.json`);
     url = "banlist_sample.json";
   }
 
   if (deckId == -2) {
+    console.log(`[DEBUG]: deckId[${deckId}] >> basics_sample.json`);
     url = "basics_sample.json";
   }
 
   if (deckId == -3) {
+    console.log(`[DEBUG]: deckId[${deckId}] >> nonbasics_sample.json`);
     url = "nonbasics_sample.json";
   }
 
   if (deckId == 0) {
+    console.log(`[DEBUG]: deckId[${deckId}] >> deck_sample.json`);
     url = "deck_sample.json";
   }
 
