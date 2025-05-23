@@ -4,79 +4,300 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Goon Proxy Tool</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400&display=swap" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
     <style>
-      /* Inline styles for header */
-      h1,
-      h2 {
-        font-family: "Cinzel", serif;
-        text-align: left;
-        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-        color: #000000;
+      :root {
+        --primary: #3900d5;
+        --primary-hover: #2d00a8;
+        --success: #28a745;
+        --success-hover: #218838;
+        --danger: #dc3545;
+        --danger-hover: #c82333;
+        --background: #ffffff;
+        --text: #333333;
+        --text-light: #666666;
+        --card-bg: #f8f9fa;
+        --border: #dee2e6;
+        --shadow: rgba(0, 0, 0, 0.1);
+        --radius: 8px;
+        --transition: all 0.3s ease;
       }
 
-      h1 {
-        font-size: 2.5em;
+      /* Dark mode variables */
+      .dark-mode {
+        --primary: #5a2de0;
+        --primary-hover: #6e45e2;
+        --background: #121212;
+        --text: #f1f1f1;
+        --text-light: #b0b0b0;
+        --card-bg: #1e1e1e;
+        --border: #333333;
+        --shadow: rgba(255, 255, 255, 0.05);
       }
 
-      h2 {
-        font-size: 1.5em;
-      }
-
-      /* Dark mode overrides */
-      body.dark-mode h1,
-      body.dark-mode h2 {
-        color: #ffffff;
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
       }
 
       body {
-        background-color: white;
-        color: black;
-        transition: background-color 0.3s, color 0.3s;
+        font-family: "Inter", sans-serif;
+        background-color: var(--background);
+        color: var(--text);
+        line-height: 1.6;
+        transition: var(--transition);
+        padding-bottom: 2rem;
       }
 
-      body.dark-mode {
-        background-color: #121212f1;
-        color: #f1f1f1;
+      .container {
+        width: 100%;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 1rem;
       }
-      /* Top Bar Layout */
-      .topbar {
+
+      /* Header styles */
+      header {
+        background-color: var(--primary);
+        color: white;
+        padding: 1rem 0;
+        box-shadow: 0 2px 10px var(--shadow);
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
+
+      .header-content {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        background-color: #3900d5;
-        padding: 10px 20px;
-        color: white;
+      }
+
+      .logo {
         font-family: "Cinzel", serif;
-        flex-wrap: wrap;
+        font-size: 1.8rem;
+        font-weight: 700;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
       }
 
-      /* Title */
-      .topbar .title {
-        font-size: 1.8em;
-      }
-
-      /* Button Group */
-      .topbar-buttons {
+      .header-buttons {
         display: flex;
-        gap: 10px;
+        gap: 0.75rem;
       }
 
-      /* Icon Buttons */
       .icon-button {
         background: none;
         border: none;
-        font-size: 1.5em;
+        font-size: 1.25rem;
         cursor: pointer;
-        padding: 6px 10px;
-        border-radius: 8px;
+        padding: 0.5rem;
+        border-radius: var(--radius);
         color: white;
-        transition: background-color 0.3s, transform 0.2s;
+        transition: var(--transition);
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
 
       .icon-button:hover {
         background-color: rgba(255, 255, 255, 0.2);
-        transform: scale(1.1);
+        transform: scale(1.05);
+      }
+
+      /* Main content */
+      main {
+        margin-top: 2rem;
+      }
+
+      .card {
+        background-color: var(--card-bg);
+        border-radius: var(--radius);
+        box-shadow: 0 4px 6px var(--shadow);
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+        border: 1px solid var(--border);
+        transition: var(--transition);
+      }
+
+      .card:hover {
+        box-shadow: 0 6px 12px var(--shadow);
+      }
+
+      h2 {
+        font-family: "Cinzel", serif;
+        margin-bottom: 1rem;
+        color: var(--primary);
+        font-size: 1.5rem;
+      }
+
+      /* Form elements */
+      .checkbox-group {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 0.75rem;
+        margin-bottom: 1rem;
+      }
+
+      .checkbox-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem;
+        border-radius: var(--radius);
+        transition: var(--transition);
+      }
+
+      .checkbox-item:hover {
+        background-color: var(--shadow);
+      }
+
+      input[type="checkbox"] {
+        width: 1.25rem;
+        height: 1.25rem;
+        accent-color: var(--primary);
+        cursor: pointer;
+      }
+
+      label {
+        cursor: pointer;
+        font-weight: 500;
+      }
+
+      a {
+        color: var(--primary);
+        text-decoration: none;
+        transition: var(--transition);
+      }
+
+      a:hover {
+        text-decoration: underline;
+      }
+
+      .textarea-container {
+        position: relative;
+        margin-bottom: 1.5rem;
+      }
+
+      textarea {
+        width: 100%;
+        min-height: 200px;
+        padding: 1rem;
+        border-radius: var(--radius);
+        border: 1px solid var(--border);
+        background-color: var(--background);
+        color: var(--text);
+        font-family: "Inter", sans-serif;
+        font-size: 1rem;
+        resize: vertical;
+        transition: var(--transition);
+      }
+
+      textarea:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow: 0 0 0 2px rgba(57, 0, 213, 0.2);
+      }
+
+      .button-group {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+        flex-wrap: wrap;
+      }
+
+      .btn {
+        font-family: "Cinzel", serif;
+        padding: 0.75rem 1.5rem;
+        border: none;
+        border-radius: var(--radius);
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: var(--transition);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: white;
+      }
+
+      .btn-primary {
+        background-color: var(--success);
+      }
+
+      .btn-primary:hover {
+        background-color: var(--success-hover);
+      }
+
+      .btn-danger {
+        background-color: var(--danger);
+      }
+
+      .btn-danger:hover {
+        background-color: var(--danger-hover);
+      }
+
+      /* Output sections */
+      .output-section {
+        margin-top: 2rem;
+      }
+
+      .output-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.5rem;
+      }
+
+      @media (max-width: 768px) {
+        .output-container {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .output-card {
+        background-color: var(--card-bg);
+        border-radius: var(--radius);
+        border: 1px solid var(--border);
+        overflow: hidden;
+      }
+
+      .output-header {
+        background-color: var(--primary);
+        color: white;
+        padding: 0.75rem 1rem;
+        font-family: "Cinzel", serif;
+        font-weight: 600;
+      }
+
+      .output-content {
+        padding: 1rem;
+        max-height: 300px;
+        overflow-y: auto;
+        white-space: pre-wrap;
+        font-family: monospace;
+        font-size: 0.9rem;
+        color: var(--text);
+      }
+
+      /* Responsive adjustments */
+      @media (max-width: 640px) {
+        .checkbox-group {
+          grid-template-columns: 1fr;
+        }
+
+        .button-group {
+          justify-content: center;
+        }
+
+        .btn {
+          width: 100%;
+          justify-content: center;
+        }
       }
 
       /* Dark mode toggle icon */
@@ -88,124 +309,127 @@
         content: "☀️";
       }
 
-      /* Responsive: stack layout on small screens */
-      @media (max-width: 480px) {
-        .topbar {
-          flex-direction: column;
-          align-items: flex-start;
-          gap: 10px;
+      /* Loading indicator */
+      .loading {
+        display: none;
+        text-align: center;
+        padding: 1rem;
+      }
+
+      .loading.active {
+        display: block;
+      }
+
+      .spinner {
+        width: 40px;
+        height: 40px;
+        margin: 0 auto;
+        border: 4px solid rgba(0, 0, 0, 0.1);
+        border-left-color: var(--primary);
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
         }
+      }
+
+      /* Footer */
+      footer {
+        text-align: center;
+        margin-top: 3rem;
+        padding: 1rem;
+        color: var(--text-light);
+        font-size: 0.9rem;
       }
     </style>
   </head>
   <body>
-    <div class="topbar">
-      <div class="title">Goon Proxies</div>
-      <div class="topbar-buttons">
-        <button id="enableDeveloperMode" class="icon-button" title="Toggle Developer Mode">🔧</button>
-        <button id="enableDarkMode" class="icon-button" title="Toggle Dark Mode"></button>
+    <header>
+      <div class="container header-content">
+        <div class="logo">Goon Proxies</div>
+        <div class="header-buttons">
+          <button id="enableDeveloperMode" class="icon-button" title="Toggle Developer Mode">🔧</button>
+          <button id="enableDarkMode" class="icon-button" title="Toggle Dark Mode"></button>
+        </div>
       </div>
-    </div>
+    </header>
 
-    <!-- Configuration Checkboxes -->
-    <div>
-      <label>
-        <input type="checkbox" id="removeBannedCards" checked />
-        Remove <a href="https://archidekt.com/decks/7853311/">Banned Playgroup Cards</a></label
-      ><br />
+    <main class="container">
+      <div class="card">
+        <h2>Configuration</h2>
+        <div class="checkbox-group">
+          <div class="checkbox-item">
+            <input type="checkbox" id="removeBannedCards" checked />
+            <label for="removeBannedCards">
+              Remove <a href="https://archidekt.com/decks/7853311/" target="_blank">Banned Playgroup Cards</a>
+            </label>
+          </div>
 
-      <label>
-        <input type="checkbox" id="removeBasicLands" checked />
-        Remove Basic Lands </label
-      ><br />
+          <div class="checkbox-item">
+            <input type="checkbox" id="removeBasicLands" checked />
+            <label for="removeBasicLands">Remove Basic Lands</label>
+          </div>
 
-      <label>
-        <input type="checkbox" id="removeNonBasicLands" />
-        Remove Non-Basic Lands </label
-      ><br />
+          <div class="checkbox-item">
+            <input type="checkbox" id="removeNonBasicLands" />
+            <label for="removeNonBasicLands">Remove Non-Basic Lands</label>
+          </div>
 
-      <label>
-        <input type="checkbox" id="disableCorsProxy" checked />
-        Enable CORS Proxy (DEVELOPMENT) </label
-      ><br /><br />
-    </div>
+          <div class="checkbox-item">
+            <input type="checkbox" id="disableCorsProxy" checked />
+            <label for="disableCorsProxy">Enable CORS Proxy (DEVELOPMENT)</label>
+          </div>
+        </div>
+      </div>
 
-    <!-- Decklist Input -->
-    <label for="decklist" style="font-weight: bold">Paste your decklist here *or* an Archidekt Deck URL:</label><br />
-    <!-- TODO: Add Mobile / Screen Size Handling for Text Area -->
-    <textarea
-      id="decklist"
-      rows="10"
-      cols="60"
-      placeholder="https://archidekt.com/decks/1234567/super_balanced_deck&#10;1 Sol Ring&#10;2 Huge Cone&#10;1 Island&#10;..."
-    ></textarea
-    ><br /><br />
+      <div class="card">
+        <h2>Deck Input</h2>
+        <div class="textarea-container">
+          <label for="decklist" style="display: block; margin-bottom: 0.5rem; font-weight: 600">
+            Paste your decklist here *or* an Archidekt Deck URL:
+          </label>
+          <textarea
+            id="decklist"
+            placeholder="https://archidekt.com/decks/1234567/super_balanced_deck&#10;1 Sol Ring&#10;2 Huge Cone&#10;1 Island&#10;..."
+          ></textarea>
+        </div>
 
-    <!-- Button for Deck Processing -->
-    <button id="processDeck" style="background: none; border: none; cursor: pointer; padding: 10px; outline: none">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 200 60"
-        width="150"
-        height="45"
-        style="border-radius: 10px; background: #28a745; transition: background-color 0.3s"
-      >
-        <rect width="100%" height="100%" rx="10" ry="10" fill="#28a745" />
-        <text
-          x="50%"
-          y="50%"
-          dominant-baseline="middle"
-          text-anchor="middle"
-          fill="white"
-          font-size="20"
-          font-family="Cinzel"
-        >
-          Process Deck
-        </text>
-        <style>
-          svg:hover rect {
-            fill: #000000; /* Darker green on hover */
-            opacity: 0.1;
-          }
-        </style>
-      </svg>
-    </button>
-    <!-- Button for Deck Reset -->
-    <button id="resetDeck" style="background: none; border: none; cursor: pointer; padding: 10px; outline: none">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 200 60"
-        width="150"
-        height="45"
-        style="border-radius: 10px; background: #dc3545; transition: background-color 0.3s"
-      >
-        <rect width="100%" height="100%" rx="10" ry="10" fill="#dc3545" />
-        <text
-          x="50%"
-          y="50%"
-          dominant-baseline="middle"
-          text-anchor="middle"
-          fill="white"
-          font-size="20"
-          font-family="Cinzel"
-        >
-          Reset
-        </text>
-        <style>
-          svg:hover rect {
-            fill: #000000; /* Darker green on hover */
-            opacity: 0.1;
-          }
-        </style>
-      </svg>
-    </button>
+        <div class="button-group">
+          <button id="processDeck" class="btn btn-primary">
+            <span>Process Deck</span>
+          </button>
+          <button id="resetDeck" class="btn btn-danger">
+            <span>Reset</span>
+          </button>
+        </div>
 
-    <!-- Output Areas -->
-    <h2>Output:</h2>
-    <pre id="cards-include"></pre>
+        <div id="loading" class="loading">
+          <div class="spinner"></div>
+          <p>Processing deck...</p>
+        </div>
+      </div>
 
-    <h2>Removed:</h2>
-    <pre id="cards-remove"></pre>
+      <div class="output-section">
+        <div class="output-container">
+          <div class="output-card">
+            <div class="output-header">Included Cards</div>
+            <pre id="cards-include" class="output-content"></pre>
+          </div>
+
+          <div class="output-card">
+            <div class="output-header">Removed Cards</div>
+            <pre id="cards-remove" class="output-content"></pre>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer>
+      <p>Goon Proxy Tool &copy; 2024 | A tool for Magic: The Gathering players</p>
+    </footer>
 
     <script src="script.js"></script>
   </body>
