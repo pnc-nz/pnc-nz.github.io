@@ -108,11 +108,12 @@ function getDeckIdFromUrl(deckUrl) {
 async function getDeckById(deckId, corsEnabled = True) {
   let original_url = `https://archidekt.com/api/decks/${deckId}/`;
   url = encodeURIComponent(original_url);
+  //https://corsproxy.io/?url=https://example.com
 
   // Config: CORS Toggle
   if (corsEnabled) {
     console.log("[DEBUG]: CORS Enabled");
-    url = "https://corsproxy.io/?" + encodeURIComponent(original_url);
+    url = "https://corsproxy.io/?url=" + encodeURIComponent(original_url);
   }
 
   if (deckId == -1) {
