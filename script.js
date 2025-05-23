@@ -214,7 +214,7 @@ function isValidInput(input) {
 // Process decklist: remove basic lands and remove banned cards
 async function processDeck(deck) {
   // Config - General
-  const disableCorsProxy = document.getElementById("disableCorsProxy").checked;
+  const enableCorsProxy = document.getElementById("enableCorsProxy").checked;
   const enableDeveloperMode = document.getElementById("enableDeveloperMode").checked;
 
   // Config - Deck & Cards
@@ -231,7 +231,7 @@ async function processDeck(deck) {
   // Validation: Archidekt URLs
   if (isValidArchidektUrlFmt(deck)) {
     const deckId = getDeckIdFromUrl(deck);
-    const inputDeck = await getDeckById(deckId, disableCorsProxy);
+    const inputDeck = await getDeckById(deckId, enableCorsProxy);
     const cardList = getCardNamesFromArchidektDeck(inputDeck, true);
     deck = cardList.join("\n");
     document.getElementById("decklist").value = deck;
@@ -252,21 +252,21 @@ async function processDeck(deck) {
 
   // Remove: Banned Playgroup Cards
   if (removeBannedCards) {
-    const bannedCardDeck = await getDeckById(bannedCardsDeckId, disableCorsProxy);
+    const bannedCardDeck = await getDeckById(bannedCardsDeckId, enableCorsProxy);
     const cards = getCardNamesFromArchidektDeck(bannedCardDeck);
     cardsToRemove.push(...cards);
   }
 
   // Remove: Basic Lands
   if (removeBasicLands) {
-    const basicLandsDeck = await getDeckById(basicLandsDeckId, disableCorsProxy);
+    const basicLandsDeck = await getDeckById(basicLandsDeckId, enableCorsProxy);
     const cards = getCardNamesFromArchidektDeck(basicLandsDeck);
     cardsToRemove.push(...cards);
   }
 
   // Remove: Non-Basic
   if (removeNonBasicLands) {
-    const nonBasicLandsDeck = await getDeckById(nonBasicLandsDeckId, disableCorsProxy);
+    const nonBasicLandsDeck = await getDeckById(nonBasicLandsDeckId, enableCorsProxy);
     const cards = getCardNamesFromArchidektDeck(nonBasicLandsDeck);
     cardsToRemove.push(...cards);
   }
@@ -360,5 +360,9 @@ document.getElementById("enableDarkMode").addEventListener("click", () => {
 
 /* BUTTON - DEVELOPER MODE */
 document.getElementById("enableDeveloperMode").addEventListener("click", () => {
-  alert("Developer Mode toggled (stub)");
+  const checkbox = document.getElementById("enableCorsProxy");
+  const checkboxItem = checkbox?.closest(".checkbox-item");
+  if (checkboxItem) {
+    checkboxItem.style.display = checkboxItem.style.display === "none" ? "block" : "none";
+  }
 });
