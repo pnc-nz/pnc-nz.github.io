@@ -341,6 +341,53 @@ async function processDeck(deck) {
 // .............\..............(
 // ..............\..............\  ~ kai
 
+/* LOCAL STORAGE - SETTINGS CACHE */
+document.addEventListener("DOMContentLoaded", () => {
+  // Keys and related checkboxes
+  const settings = {
+    darkMode: {
+      element: document.getElementById("enableDarkMode"),
+      apply: (enabled) => document.body.classList.toggle("dark-mode", enabled),
+    },
+    removeBannedCards: {
+      element: document.getElementById("removeBannedCards"),
+    },
+    removeBasicLands: {
+      element: document.getElementById("removeBasicLands"),
+    },
+    removeNonBasicLands: {
+      element: document.getElementById("removeNonBasicLands"),
+    },
+  };
+
+  // Initialize from session storage
+  for (const [key, { element, apply }] of Object.entries(settings)) {
+    const stored = sessionStorage.getItem(key);
+    if (stored !== null) {
+      const isChecked = stored === "true";
+      if (element.type === "checkbox") {
+        element.checked = isChecked;
+      }
+      if (apply) apply(isChecked);
+    }
+  }
+
+  /* BUTTON - DARK MODE/LIGHT MODE */
+  settings.darkMode.element.addEventListener("click", () => {
+    const isDark = document.body.classList.toggle("dark-mode");
+    sessionStorage.setItem("darkMode", isDark);
+  });
+
+  // Store checkbox changes
+  for (const [key, { element }] of Object.entries(settings)) {
+    if (element.type === "checkbox") {
+      element.addEventListener("change", () => {
+        sessionStorage.setItem(key, element.checked);
+      });
+    }
+  }
+});
+
 /* BUTTON - PROCESS DECK */
 document.getElementById("processDeck").addEventListener("click", async () => {
   await processDeck(document.getElementById("decklist").value);
@@ -351,11 +398,6 @@ document.getElementById("resetDeck").addEventListener("click", () => {
   document.getElementById("decklist").value = "";
   document.getElementById("cards-include").textContent = "";
   document.getElementById("cards-remove").textContent = "";
-});
-
-/* BUTTON - DARK MODE/LIGHT MODE */
-document.getElementById("enableDarkMode").addEventListener("click", () => {
-  document.body.classList.toggle("dark-mode");
 });
 
 /* BUTTON - DEVELOPER MODE */
