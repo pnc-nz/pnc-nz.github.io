@@ -1,6 +1,6 @@
-const basicLandsDeckId = "9637985";
-const nonBasicLandsDeckId = "7966401";
-const bannedCardsDeckId = "7853311";
+let basicLandsDeckId = "9637985";
+let nonBasicLandsDeckId = "7966401";
+let bannedCardsDeckId = "7853311";
 // BASIC LANDS - https://archidekt.com/decks/9637985
 // NON-BASIC LANDS - https://archidekt.com/decks/7966401
 // Browser: https://archidekt.com/decks/7853311/banlist_draft
@@ -105,23 +105,33 @@ function getDeckIdFromUrl(deckUrl) {
 }
 
 // Function to get deck data by deckId
-async function getDeckById(deckId) {
+async function getDeckById(deckId, corsEnabled = True) {
   let original_url = `https://archidekt.com/api/decks/${deckId}/`;
-  // const url = "https://corsproxy.io/?" + original_url;
-  const url = "https://corsproxy.io/?" + encodeURIComponent(original_url);
+  url = encodeURIComponent(original_url);
+
+  // Config: CORS Toggle
+  if (corsEnabled) {
+    console.log("[DEBUG]: CORS Enabled");
+    url = "https://corsproxy.io/?" + encodeURIComponent(original_url);
+  }
+
   if (deckId == -1) {
+    console.log(`[DEBUG]: deckId[${deckId}] >> banlist_sample.json`);
     url = "banlist_sample.json";
   }
 
   if (deckId == -2) {
+    console.log(`[DEBUG]: deckId[${deckId}] >> basics_sample.json`);
     url = "basics_sample.json";
   }
 
   if (deckId == -3) {
+    console.log(`[DEBUG]: deckId[${deckId}] >> nonbasics_sample.json`);
     url = "nonbasics_sample.json";
   }
 
   if (deckId == 0) {
+    console.log(`[DEBUG]: deckId[${deckId}] >> deck_sample.json`);
     url = "deck_sample.json";
   }
 
@@ -163,7 +173,7 @@ function getCardNamesFromArchidektDeck(deckData, prepend_quantity = false) {
 function isValidExportFmt(input) {
   // Check if the input is a deck format
   // (e.g., cards listed by `{x} {name} {a} {b}` format, where x is a number followed by n space - separated strings)
-  const exportFormatPattern = /^\d+\s+.+$/;
+  const exportFormatPattern = /^\d+\s*x?\s+.+$/i;
   const lines = input.split("\n");
 
   // Check each line to see if it follows the card format
@@ -202,30 +212,61 @@ function isValidInput(input) {
 
 // Process decklist: remove basic lands and remove banned cards
 async function processDeck(deck) {
-  // Handle Configuration
+  // Config - General
+  const disableCorsProxy = document.getElementById("disableCorsProxy").checked;
+  const enableDeveloperMode = document.getElementById("enableDeveloperMode").checked;
+
+  // Config - Deck & Cards
   const removeBannedCards = document.getElementById("removeBannedCards").checked;
   const removeBasicLands = document.getElementById("removeBasicLands").checked;
   const removeNonBasicLands = document.getElementById("removeNonBasicLands").checked;
 
-  let cardsToRemove = [];
-  // Handle banned deck(s)
-  if (removeBannedCards) {
-    const d = await getDeckById(bannedCardsDeckId);
-    // const d = await getDeckById(-1);
-    const cards = getCardNamesFromArchidektDeck(d);
-    cardsToRemove.push(...cards);
+  // Validation: Input
+  if (!isValidInput(deck)) {
+    alert("Please enter a valid deck format or a valid Archidekt Deck URL. Your deck must be set to 'public'!");
+    return;
   }
-  if (removeBasicLands) {
-    const d = await getDeckById(basicLandsDeckId);
-    // const d = await getDeckById(-2);
-    const cards = getCardNamesFromArchidektDeck(d);
+
+  // Validation: Archidekt URLs
+  if (isValidArchidektUrlFmt(deck)) {
+    const deckId = getDeckIdFromUrl(deck);
+    const inputDeck = await getDeckById(deckId, disableCorsProxy);
+    const cardList = getCardNamesFromArchidektDeck(inputDeck, true);
+    deck = cardList.join("\n");
+    document.getElementById("decklist").value = deck;
+  }
+
+  let cardsToRemove = [];
+
+  // Config: Developer Mode Toggle
+  if (enableDeveloperMode) {
+    bannedCardsDeckId = -1;
+    basicLandsDeckId = -2;
+    nonBasicLandsDeckId = -3;
+  } else {
+    basicLandsDeckId = "9637985";
+    nonBasicLandsDeckId = "7966401";
+    bannedCardsDeckId = "7853311";
+  }
+
+  // Remove: Banned Playgroup Cards
+  if (removeBannedCards) {
+    const bannedCardDeck = await getDeckById(bannedCardsDeckId, disableCorsProxy);
+    const cards = getCardNamesFromArchidektDeck(bannedCardDeck);
     cardsToRemove.push(...cards);
   }
 
+  // Remove: Basic Lands
+  if (removeBasicLands) {
+    const basicLandsDeck = await getDeckById(basicLandsDeckId, disableCorsProxy);
+    const cards = getCardNamesFromArchidektDeck(basicLandsDeck);
+    cardsToRemove.push(...cards);
+  }
+
+  // Remove: Non-Basic
   if (removeNonBasicLands) {
-    const d = await getDeckById(nonBasicLandsDeckId);
-    // const d = await getDeckById(-3);
-    const cards = getCardNamesFromArchidektDeck(d);
+    const nonBasicLandsDeck = await getDeckById(nonBasicLandsDeckId, disableCorsProxy);
+    const cards = getCardNamesFromArchidektDeck(nonBasicLandsDeck);
     cardsToRemove.push(...cards);
   }
 
@@ -301,18 +342,7 @@ async function processDeck(deck) {
 
 /* BUTTON - PROCESS DECK */
 document.getElementById("processDeck").addEventListener("click", async () => {
-  let decklist = document.getElementById("decklist").value;
-  if (!isValidInput(decklist)) {
-    alert("Please enter a valid deck format or a valid Archidekt Deck URL. Your deck must be set to 'public'!");
-    return;
-  } else {
-    if (isValidArchidektUrlFmt(decklist)) {
-      input_deck = await getDeckById(getDeckIdFromUrl(decklist));
-      decklist = getCardNamesFromArchidektDeck(input_deck, true).join("\n");
-      document.getElementById("decklist").value = decklist;
-    }
-    await processDeck(decklist);
-  }
+  await processDeck(document.getElementById("decklist").value);
 });
 
 /* BUTTON - RESET DECK */
@@ -320,4 +350,14 @@ document.getElementById("resetDeck").addEventListener("click", () => {
   document.getElementById("decklist").value = "";
   document.getElementById("cards-include").textContent = "";
   document.getElementById("cards-remove").textContent = "";
+});
+
+/* BUTTON - DARK MODE/LIGHT MODE */
+document.getElementById("enableDarkMode").addEventListener("click", () => {
+  document.body.classList.toggle("dark-mode");
+});
+
+/* BUTTON - DEVELOPER MODE */
+document.getElementById("enableDeveloperMode").addEventListener("click", () => {
+  alert("Developer Mode toggled (stub)");
 });

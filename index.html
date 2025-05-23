@@ -7,33 +7,111 @@
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400&display=swap" rel="stylesheet" />
     <style>
       /* Inline styles for header */
-      h1 {
-        font-family: "Cinzel", serif;
-        font-size: 2.5em; /* Adjust size as needed */
-        text-align: left;
-        color: #000000; /* Indigo color for a fantasy touch */
-        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); /* Optional shadow for depth */
-      }
+      h1,
       h2 {
         font-family: "Cinzel", serif;
-        font-size: 1.5em; /* Adjust size as needed */
         text-align: left;
-        color: #000000; /* Indigo color for a fantasy touch */
-        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); /* Optional shadow for depth */
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        color: #000000;
       }
-      label {
+
+      h1 {
+        font-size: 2.5em;
+      }
+
+      h2 {
+        font-size: 1.5em;
+      }
+
+      /* Dark mode overrides */
+      body.dark-mode h1,
+      body.dark-mode h2 {
+        color: #ffffff;
+      }
+
+      body {
+        background-color: white;
+        color: black;
+        transition: background-color 0.3s, color 0.3s;
+      }
+
+      body.dark-mode {
+        background-color: #121212f1;
+        color: #f1f1f1;
+      }
+      /* Top Bar Layout */
+      .topbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: #3900d5;
+        padding: 10px 20px;
+        color: white;
         font-family: "Cinzel", serif;
+        flex-wrap: wrap;
+      }
+
+      /* Title */
+      .topbar .title {
+        font-size: 1.8em;
+      }
+
+      /* Button Group */
+      .topbar-buttons {
+        display: flex;
+        gap: 10px;
+      }
+
+      /* Icon Buttons */
+      .icon-button {
+        background: none;
+        border: none;
+        font-size: 1.5em;
+        cursor: pointer;
+        padding: 6px 10px;
+        border-radius: 8px;
+        color: white;
+        transition: background-color 0.3s, transform 0.2s;
+      }
+
+      .icon-button:hover {
+        background-color: rgba(255, 255, 255, 0.2);
+        transform: scale(1.1);
+      }
+
+      /* Dark mode toggle icon */
+      #enableDarkMode::before {
+        content: "🌙";
+      }
+
+      body.dark-mode #enableDarkMode::before {
+        content: "☀️";
+      }
+
+      /* Responsive: stack layout on small screens */
+      @media (max-width: 480px) {
+        .topbar {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 10px;
+        }
       }
     </style>
   </head>
   <body>
-    <h1>Goon Proxies</h1>
+    <div class="topbar">
+      <div class="title">Goon Proxies</div>
+      <div class="topbar-buttons">
+        <button id="enableDeveloperMode" class="icon-button" title="Toggle Developer Mode">🔧</button>
+        <button id="enableDarkMode" class="icon-button" title="Toggle Dark Mode"></button>
+      </div>
+    </div>
 
     <!-- Configuration Checkboxes -->
     <div>
       <label>
         <input type="checkbox" id="removeBannedCards" checked />
-        Remove Banned Cards </label
+        Remove <a href="https://archidekt.com/decks/7853311/">Banned Playgroup Cards</a></label
       ><br />
 
       <label>
@@ -44,11 +122,17 @@
       <label>
         <input type="checkbox" id="removeNonBasicLands" />
         Remove Non-Basic Lands </label
+      ><br />
+
+      <label>
+        <input type="checkbox" id="disableCorsProxy" />
+        Disable CORS Proxy (DEVELOPMENT) </label
       ><br /><br />
     </div>
 
     <!-- Decklist Input -->
     <label for="decklist" style="font-weight: bold">Paste your decklist here *or* an Archidekt Deck URL:</label><br />
+    <!-- TODO: Add Mobile / Screen Size Handling for Text Area -->
     <textarea
       id="decklist"
       rows="10"

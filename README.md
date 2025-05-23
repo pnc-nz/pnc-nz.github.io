@@ -10,3 +10,10 @@ The on-going banlist can be found on [Archidekt](https://archidekt.com/decks/785
 # Deployment
 
 Uses GitHub Pages and deployment workflow, just push to repo
+
+
+# Contributions
+
+< text for other goons to contribute to this project >
+
+
