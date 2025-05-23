@@ -157,6 +157,13 @@
         background-color: var(--shadow);
       }
 
+      #enableCorsProxy {
+      }
+
+      .checkbox-item:has(#enableCorsProxy) {
+        display: none;
+      }
+
       input[type="checkbox"] {
         width: 1.25rem;
         height: 1.25rem;
@@ -378,9 +385,9 @@
             <label for="removeNonBasicLands">Remove Non-Basic Lands</label>
           </div>
 
-          <div class="checkbox-item">
-            <input type="checkbox" id="disableCorsProxy" checked />
-            <label for="disableCorsProxy">Enable CORS Proxy (DEVELOPMENT)</label>
+          <div class="checkbox-item" style="display: none">
+            <input type="checkbox" id="enableCorsProxy" checked />
+            <label for="enableCorsProxy">Enable CORS Proxy (DEVELOPMENT)</label>
           </div>
         </div>
       </div>
@@ -428,7 +435,7 @@
     </main>
 
     <footer>
-      <p>Goon Proxy Tool &copy; 2024 | A tool for Magic: The Gathering players</p>
+      <p>Goon Proxy Tool &copy; 2025 | get fucked</p>
     </footer>
 
     <script src="script.js"></script>
