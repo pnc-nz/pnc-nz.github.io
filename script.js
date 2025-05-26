@@ -175,7 +175,7 @@ function isValidExportFmt(input) {
   // Check if the input is a deck format
   // (e.g., cards listed by `{x} {name} {a} {b}` format, where x is a number followed by n space - separated strings)
   const exportFormatPattern = /^\d+\s*x?\s+.+$/i;
-  const lines = input.split("\n");
+  const lines = input.split("\n").filter((line) => line.trim() !== "");
 
   // Check each line to see if it follows the card format
   for (let line of lines) {
